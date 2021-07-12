@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 
 void main() {
   runApp(ColorPicker());
@@ -18,7 +19,6 @@ class ColorPickerHome extends StatefulWidget {
 }
 
 class _ColorPickerHomeState extends State<ColorPickerHome> {
-  
   double _redSlider = 0;
   double _blueSlider = 0;
   double _greenSlider = 0;
@@ -32,10 +32,29 @@ class _ColorPickerHomeState extends State<ColorPickerHome> {
     "Green": Colors.green,
     "Yellow": Colors.yellow
   };
-  
+
+  void saveSliderPosition() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setDouble("redSlider", _redSlider);
+    prefs.setDouble("blueSlider", _blueSlider);
+    prefs.setDouble("greenSlider", _greenSlider);
+    prefs.setDouble("opacitySlider", _opacitySlider);
+  }
+
+  void readSliderPosition() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _redSlider = prefs.getDouble("redSlider") ?? 0;
+    _blueSlider = prefs.getDouble("blueSlider") ?? 0;
+    _greenSlider = prefs.getDouble("greenSlider") ?? 0;
+    _opacitySlider = prefs.getDouble("opacitySlider") ?? 1;
+    _appBarColor = Color.fromRGBO(_redSlider.toInt(), _greenSlider.toInt(),
+        _blueSlider.toInt(), _opacitySlider);
+    print("set value back");
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
+    readSliderPosition();
     super.initState();
   }
 
@@ -59,8 +78,7 @@ class _ColorPickerHomeState extends State<ColorPickerHome> {
                     child: Text(v.key),
                     style: ElevatedButton.styleFrom(
                         primary: v.value,
-                        minimumSize: Size(double.infinity, 50))
-                        ),
+                        minimumSize: Size(double.infinity, 50))),
                 margin: EdgeInsets.fromLTRB(10, 0, 10, 5),
               ),
             Slider(
@@ -68,7 +86,12 @@ class _ColorPickerHomeState extends State<ColorPickerHome> {
               onChanged: (value) {
                 setState(() {
                   _redSlider = value;
-                  _appBarColor = Color.fromRGBO(_redSlider.toInt(), _greenSlider.toInt(), _blueSlider.toInt(), _opacitySlider);
+                  _appBarColor = Color.fromRGBO(
+                      _redSlider.toInt(),
+                      _greenSlider.toInt(),
+                      _blueSlider.toInt(),
+                      _opacitySlider);
+                  saveSliderPosition();
                 });
               },
               min: 0,
@@ -82,7 +105,12 @@ class _ColorPickerHomeState extends State<ColorPickerHome> {
               onChanged: (value) {
                 setState(() {
                   _greenSlider = value;
-                  _appBarColor = Color.fromRGBO(_redSlider.toInt(), _greenSlider.toInt(), _blueSlider.toInt(), _opacitySlider);
+                  _appBarColor = Color.fromRGBO(
+                      _redSlider.toInt(),
+                      _greenSlider.toInt(),
+                      _blueSlider.toInt(),
+                      _opacitySlider);
+                  saveSliderPosition();
                 });
               },
               min: 0,
@@ -96,7 +124,12 @@ class _ColorPickerHomeState extends State<ColorPickerHome> {
               onChanged: (value) {
                 setState(() {
                   _blueSlider = value;
-                  _appBarColor = Color.fromRGBO(_redSlider.toInt(), _greenSlider.toInt(), _blueSlider.toInt(), _opacitySlider);
+                  _appBarColor = Color.fromRGBO(
+                      _redSlider.toInt(),
+                      _greenSlider.toInt(),
+                      _blueSlider.toInt(),
+                      _opacitySlider);
+                  saveSliderPosition();
                 });
               },
               min: 0,
@@ -110,7 +143,12 @@ class _ColorPickerHomeState extends State<ColorPickerHome> {
               onChanged: (value) {
                 setState(() {
                   _opacitySlider = value;
-                  _appBarColor = Color.fromRGBO(_redSlider.toInt(), _greenSlider.toInt(), _blueSlider.toInt(), _opacitySlider);
+                  _appBarColor = Color.fromRGBO(
+                      _redSlider.toInt(),
+                      _greenSlider.toInt(),
+                      _blueSlider.toInt(),
+                      _opacitySlider);
+                  saveSliderPosition();
                 });
               },
               min: 0.0,
@@ -119,7 +157,6 @@ class _ColorPickerHomeState extends State<ColorPickerHome> {
               label: "$_opacitySlider",
               activeColor: Colors.grey,
             ),
-          
           ],
         ));
   }
