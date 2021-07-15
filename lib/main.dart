@@ -10,7 +10,7 @@ class ColorPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ColorPickerHome(),
+      home: LoadingPage(),
       routes: {
         "/loading": (context) => LoadingPage(),
         "/home": (context) => ColorPickerHome()
